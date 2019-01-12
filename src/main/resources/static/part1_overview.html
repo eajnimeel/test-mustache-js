@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>mustache</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+</head>
+<body>
+    <pre>
+        <code class="javascript">
+var template = '\
+        이름: {{ name }}&lt;br/&gt;\
+        색: {{ color }}&lt;br/&gt;\
+        수입사 : &lt;br/&gt;\
+        {{# importer }}\
+            &nbsp;- {{.}}&lt;br/&gt;\
+        {{/ importer }}\
+    ',
+    banana = {
+        name : '바나나',
+        color : '기본은 노랑',
+        importer : ['Dole', 'Delmont', 'sunkist']
+    };
+
+result = Mustache.render(template, banana);
+document.getElementById('view').innerHTML = result;
+        </code>
+    </pre>
+    <div class="result" id="view"></div>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="js/mustache.min.js"></script>
+    <script>
+        var template = '\
+                이름: {{ name }}<br/>\
+                색: {{ color }}<br/>\
+                수입사 : <br/>\
+                {{# importer }}\
+                    &nbsp;- {{.}}<br/>\
+                {{/ importer }}\
+            ',
+            banana = {
+                name : '바나나',
+                color : '기본은 노랑',
+                importer : ['Dole', 'Delmont', 'sunkist']
+            };
+
+        result = Mustache.render(template, banana);
+        document.getElementById('view').innerHTML = result;
+    </script>
+</body>
+</html>

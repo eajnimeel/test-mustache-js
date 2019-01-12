@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mustache.js</title>
+</head>
+<body>
+    <div id="view"></div>
+    <script src="js/mustache.min.js"></script>
+    <script id="template_index" type="x-tmpl-mustache">
+        <h3>{{ title }}</h3>
+        <ol>
+            {{#list}}
+            <li><a href="{{link}}">{{title}}</a></li>
+            {{/list}}
+        </ol>
+    </script>
+    <script>
+        var domTarget = document.getElementById('view'),
+            template = document.getElementById('template_index').innerHTML,
+            data = {
+                title: 'Mustache',
+                list: [
+                    {
+                        title: 'Mustache',
+                        link: '/part1_overview.html'
+                    },
+                    {
+                        title: "Mustache.js 간단 활용",
+                        link: '/part2_simple_useage.html'
+                    }
+                ]
+            },
+            result = Mustache.render(template, data);
+
+        domTarget.innerHTML= result;
+    </script>
+</body>
+</html>

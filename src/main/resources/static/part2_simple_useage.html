@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>musache.js 간단 활용</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <h1>mustache.js 간단 활용</h1>
+
+    <h2>사용예</h2>
+    <pre>
+        <code class="javascript">
+var view = {
+    title: "Joe",
+    calc: function () {
+        return 2 + 4;
+    }
+};
+
+var output = Mustache.render("{{title}} spends {{calc}}", view);
+        </code>
+    </pre>
+
+    <h2>API</h2>
+    <a href="https://github.com/ericelliott/rtype">rtype</a> 으로 표현되 제일 많이 쓰이는 함수.
+    <pre>
+        <code class="javascript">
+Mustache.render(
+  template            : String,
+  view                : Object,
+  partials?           : Object,
+  tags = ['{{', '}}'] : Tags,
+) => String
+
+Mustache.parse(
+  template              : String,
+  tags = ['{{', '}}']   : Tags,
+) => Token[]
+
+interface Token [String, String, Number, Number, Token[]?, Number?]
+
+interface Tags [String, String]
+        </code>
+    </pre>
+
+    <h2>템플릿</h2>
+    <h3>HTML에 포함된 템플릿</h3>
+
+    <div id="target" class="hidden result"></div>
+    <script async src="//jsfiddle.net/minjae/6145jqfk/embed/html,js,result/dark/"></script>
+
+    <h3>외부 템플릿의 로드</h3>
+    <div id="target2" class="result"></div>
+
+    <h3>커스텀 구분자</h3>
+    다음과 같이 JSP 스타일로 태그를 변경할때,
+    <pre><code class="javascript">
+var customTags = [ '<%', '%>' ];
+    </code></pre>
+    <h4>render 함수에 값으로 넘기기</h4>
+    <pre><code class="javascript">
+Mustache.render(template, view, {}, customTags);
+    </code></pre>
+    <h4>tags 프로퍼티를 오버라이드</h4>
+    <pre><code class="javascript">
+Mustache.tags = customTags;
+    </code></pre>
+
+    <h3>예제</h3>
+    <h4>객체 데이터 처리</h4>
+    <script async src="//jsfiddle.net/minjae/mc5ef2ot/embed/html,js,result/dark/"></script>
+    <h4>단순 리스트 데이터 처리</h4>
+    <script async src="//jsfiddle.net/minjae/r0s5k6w3/embed/html,js,result/dark/"></script>
+    <h4>섹션에서의 함수 처리</h4>
+    섹션 변수가 함수이면, 반복중인 현재 아이템의 컨텍스트을 가지고 호출한다.
+    <script async src="//jsfiddle.net/minjae/4sebhd2r/embed/html,js,result/dark/"></script>
+    <h4>Functions</h4>
+    섹션 키의 값이 함수 인 경우 섹션의 렌더링되지 않은 리터럴 텍스트 블록이 첫 번째 인수로 호출된다. 두 번째 인수는 현재 뷰를 뷰 인수로 사용하는 특수 렌더링 함수임. 현재 뷰 객체의 컨텍스트에서 호출된다.
+    <script async src="//jsfiddle.net/minjae/Lga9vusf/embed/html,js,result/dark/"></script>
+    <h4>Partials</h4>
+    <script async src="//jsfiddle.net/minjae/9xpjhmdw/embed/js,html,result/dark/"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="js/mustache.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script type="x-tmpl-mustache" id="template">
+        Hello {{ name }}!
+    </script>
+
+    <script>
+        (function () {
+            var view = {
+                title: "Joe",
+                calc: function () {
+                    return 2 + 4;
+                }
+            };
+
+            var output = Mustache.render("{{title}} spends {{calc}}", view);
+
+            console.info('첫번째 예제');
+            console.log(output);
+        })();
+
+        (function loadUser() {
+            var template = document.querySelector('#template').innerHTML;
+            Mustache.parse(template); // 필수 아님, 나중에 템플릿 이용시 빨라짐
+            var rendered = Mustache.render(template, {name: "Luke"});
+            document.querySelector('#target').innerHTML = rendered;
+        })();
+
+        (function loadUser() {
+            axios.get('/template.mustache')
+                .then(function(response) {
+                    console.log(response)
+                    var template = response.data,
+                        rendered = Mustache.render(template, {name: "Luke"});
+                    document.querySelector('#target2').innerHTML = rendered;
+                });
+        })();
+
+
+    </script>
+</body>
+</html>
